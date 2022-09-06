@@ -1,13 +1,19 @@
 import ContactsItem from 'components/ContactsItem/ContactsItem';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact, toDelete, deleteCheckedContacts } from 'redux/actions';
+import {
+  deleteContact,
+  deleteAllContact,
+} from 'redux/contacts/items/items-actions';
+import {
+  toDelete,
+  clearChecked,
+} from 'redux/contacts/itemsChecked/itemsChecked-actions';
 import s from './ContactList.module.css';
+import { getFilteredContacts } from 'redux/contacts/items/items-selectors';
 
 const ContactLists = () => {
-  const contacts = useSelector(store => store.contacts.items);
-  const contactsToDelete = useSelector(
-    store => store.contacts.contactsToDelete
-  );
+  const contacts = useSelector(getFilteredContacts);
+  const contactsToDelete = useSelector(({ contacts }) => contacts.itemsChecked);
 
   const dispatch = useDispatch();
 
@@ -21,7 +27,12 @@ const ContactLists = () => {
   };
 
   const handleDeleteAllClick = () => {
-    dispatch(deleteCheckedContacts(contactsToDelete));
+    const contactsAfterDeletion = contacts.filter(
+      ({ id }) => !contactsToDelete.includes(id)
+    );
+
+    dispatch(deleteAllContact(contactsAfterDeletion));
+    dispatch(clearChecked([]));
   };
 
   return (

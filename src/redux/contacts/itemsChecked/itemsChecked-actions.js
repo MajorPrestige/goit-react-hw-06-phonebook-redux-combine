@@ -1,4 +1,15 @@
-import { createAction } from '@reduxjs/toolkit';
+import { CONTACTS_TO_DELETE, CLEAR_CHECKED_CONTACTS } from 'redux/types';
 
-const toggleCheckedContacts = createAction('contacts/itemsChecked/toggle');
-const deleteCheckedContacts = createAction('contacts/itemsChecked/delete');
+export const toDelete = payload => {
+  return {
+    type: CONTACTS_TO_DELETE,
+    payload,
+  };
+};
+
+export const clearChecked = payload => {
+  return {
+    type: CLEAR_CHECKED_CONTACTS,
+    payload,
+  };
+};
